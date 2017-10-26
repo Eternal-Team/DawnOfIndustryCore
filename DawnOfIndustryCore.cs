@@ -40,6 +40,7 @@ namespace DawnOfIndustryCore
 		public override void Load()
 		{
 			Instance = this;
+
 			wireTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/BasicWire");
 			inTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/ConnectionIn");
 			outTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/ConnectionOut");
