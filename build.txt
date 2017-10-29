@@ -2,10 +2,10 @@
 version = 0.1
 displayName = The Dawn of Industry: Core
 homepage = http://forums.terraria.org/index.php?threads/itorius-mods.42289/
-hideCode = true
-hideResources = true
+hideCode = false
+hideResources = false
 includeSource = false
-buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*
+buildIgnore = *.csproj, *.user, obj\*, bin\*, .vs\*, .git\*, .editorconfig, .gitignore, *.sln, *.md
 includePDB = true
 languageVersion = 6
 modReferences = BaseLib, EnergyLib

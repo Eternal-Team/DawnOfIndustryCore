@@ -61,22 +61,26 @@ namespace DawnOfIndustryCore.Wiring
 
 		public void Frame()
 		{
+			CustomDictionary<Wire> wires = DawnOfIndustryCore.Instance.GetModWorld<DoIWorld>().wires.elements;
+
 			frameX = 0;
 			frameY = 0;
 
-			if (DoIWorld.wires.ContainsKey(position.X - 1, position.Y) && DoIWorld.wires[position.X - 1, position.Y].type == type && connections[Facing.Left]) frameX += 18;
-			if (DoIWorld.wires.ContainsKey(position.X + 1, position.Y) && DoIWorld.wires[position.X + 1, position.Y].type == type && connections[Facing.Right]) frameX += 36;
-			if (DoIWorld.wires.ContainsKey(position.X, position.Y - 1) && DoIWorld.wires[position.X, position.Y - 1].type == type && connections[Facing.Up]) frameY += 18;
-			if (DoIWorld.wires.ContainsKey(position.X, position.Y + 1) && DoIWorld.wires[position.X, position.Y + 1].type == type && connections[Facing.Down]) frameY += 36;
+			if (wires.ContainsKey(position.X - 1, position.Y) && wires[position.X - 1, position.Y].type == type && connections[Facing.Left]) frameX += 18;
+			if (wires.ContainsKey(position.X + 1, position.Y) && wires[position.X + 1, position.Y].type == type && connections[Facing.Right]) frameX += 36;
+			if (wires.ContainsKey(position.X, position.Y - 1) && wires[position.X, position.Y - 1].type == type && connections[Facing.Up]) frameY += 18;
+			if (wires.ContainsKey(position.X, position.Y + 1) && wires[position.X, position.Y + 1].type == type && connections[Facing.Down]) frameY += 36;
 		}
-		
+
 		public void Merge()
 		{
+			CustomDictionary<Wire> wires = DawnOfIndustryCore.Instance.GetModWorld<DoIWorld>().wires.elements;
+
 			foreach (Point16 check in BaseLib.Utility.Utility.CheckNeighbours())
 			{
 				Point16 point = new Point16(position.X + check.X, position.Y + check.Y);
 
-				Wire wire = DoIWorld.wires.ContainsKey(point) ? DoIWorld.wires[point] : null;
+				Wire wire = wires.ContainsKey(point) ? wires[point] : null;
 
 				if (wire != null)
 				{

@@ -39,6 +39,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,7 +53,6 @@
   <ItemGroup>
     <Compile Include="Buffs\Electrified.cs" />
     <Compile Include="Buffs\Radiation.cs" />
-    <Compile Include="CustomDictionary.cs" />
     <Compile Include="DoINPC.cs" />
     <Compile Include="DoIPlayer.cs" />
     <Compile Include="DoIWorld.cs" />
@@ -63,6 +63,7 @@
     <Compile Include="Items\Ores.cs" />
     <Compile Include="Items\Power.cs" />
     <Compile Include="Items\Wires\HeatPipe.cs" />
+    <Compile Include="Layer.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Items\Wires\BaseWire.cs" />
     <Compile Include="Tiles\HeatPipe.cs" />
