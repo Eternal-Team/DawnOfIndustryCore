@@ -63,7 +63,6 @@
     <Compile Include="Items\Ores.cs" />
     <Compile Include="Items\Power.cs" />
     <Compile Include="Items\Wires\HeatPipe.cs" />
-    <Compile Include="Layer.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Items\Wires\BaseWire.cs" />
     <Compile Include="Tiles\HeatPipe.cs" />
@@ -95,6 +94,10 @@
     <ProjectReference Include="..\EnergyLib\EnergyLib.csproj">
       <Project>{8664C658-9619-4EA2-9F3C-4EC31FBF8C99}</Project>
       <Name>EnergyLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LayerLib\LayerLib.csproj">
+      <Project>{d0299735-6572-422a-8c71-ec93e42a8690}</Project>
+      <Name>LayerLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

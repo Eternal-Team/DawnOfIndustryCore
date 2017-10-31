@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using EnergyLib.Energy;
+using LayerLib;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 
@@ -20,7 +24,7 @@ namespace DawnOfIndustryCore.Wiring
 		Blocked
 	}
 
-	public class Wire : IMultiTile
+	public class Wire : IMultiTile, ILayerElement
 	{
 		public MultiTileGrid grid;
 
@@ -90,6 +94,35 @@ namespace DawnOfIndustryCore.Wiring
 					else if (check.Y == 1 && connections[Facing.Down] && wire.connections[Facing.Up]) GetGrid().MergeGrids(wire.GetGrid());
 				}
 			}
+		}
+
+		public void Draw(SpriteBatch spriteBatch, int i, int j)
+		{
+			Vector2 position = -Main.screenPosition + new Vector2(i, j) * 16;
+
+			Main.NewText(string.Join(", ",position,i,j));
+			spriteBatch.Draw(DawnOfIndustryCore.wireTexture, position, new Rectangle(frameX, frameY, 16, 16), Color.White, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
+
+			//Point16 tePos = BaseLib.Utility.Utility.TileEntityTopLeft(i, j);
+			//TileEntity tileEntity = TileEntity.ByPosition.ContainsKey(tePos) ? TileEntity.ByPosition[tePos] : null;
+			//if (tileEntity != null && (tileEntity is IEnergyReceiver || tileEntity is IEnergyProvider))
+			//{
+			//	switch (IO)
+			//	{
+			//		case Connection.In:
+			//			Main.spriteBatch.Draw(DawnOfIndustryCore.inTexture, position + new Vector2(4), Color.White);
+			//			break;
+			//		case Connection.Out:
+			//			Main.spriteBatch.Draw(DawnOfIndustryCore.outTexture, position + new Vector2(4), Color.White);
+			//			break;
+			//		case Connection.Both:
+			//			Main.spriteBatch.Draw(DawnOfIndustryCore.bothTexture, position + new Vector2(4), Color.White);
+			//			break;
+			//		case Connection.Blocked:
+			//			Main.spriteBatch.Draw(DawnOfIndustryCore.blockedTexture, position + new Vector2(4), Color.White);
+			//			break;
+			//	}
+			//}
 		}
 	}
 }

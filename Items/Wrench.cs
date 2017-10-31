@@ -1,6 +1,7 @@
 ﻿using BaseLib.Items;
 using DawnOfIndustryCore.Items.Wires;
 using DawnOfIndustryCore.Wiring;
+using LayerLib;
 using Microsoft.Xna.Framework;
 using System.Linq;
 using Terraria;
