@@ -3,8 +3,10 @@ using Terraria;
 
 namespace DawnOfIndustryCore.Items.Wires
 {
-	public class BaseWire : BaseItem
+	public abstract class BaseWire : BaseItem
 	{
+		public int maxIO;
+
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Base Wire");

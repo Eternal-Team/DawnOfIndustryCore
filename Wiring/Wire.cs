@@ -1,5 +1,6 @@
-﻿using EnergyLib.Energy;
-using LayerLib;
+﻿using DawnOfIndustryCore.Items.Wires;
+using EnergyLib.Energy;
+using LayerLib.Layer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -54,7 +55,7 @@ namespace DawnOfIndustryCore.Wiring
 			Item item = new Item();
 			item.SetDefaults(type);
 			Name = item.modItem.GetType().Name;
-			maxIO = 1000;
+			maxIO = ((BaseWire)item.modItem).maxIO;
 		}
 
 		public MultiTileGrid GetGrid() => grid;
@@ -96,33 +97,36 @@ namespace DawnOfIndustryCore.Wiring
 			}
 		}
 
-		public void Draw(SpriteBatch spriteBatch, int i, int j)
+		public void Draw(SpriteBatch spriteBatch, Vector2 position)
 		{
-			Vector2 position = -Main.screenPosition + new Vector2(i, j) * 16;
-
-			Main.NewText(string.Join(", ",position,i,j));
 			spriteBatch.Draw(DawnOfIndustryCore.wireTexture, position, new Rectangle(frameX, frameY, 16, 16), Color.White, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
 
-			//Point16 tePos = BaseLib.Utility.Utility.TileEntityTopLeft(i, j);
-			//TileEntity tileEntity = TileEntity.ByPosition.ContainsKey(tePos) ? TileEntity.ByPosition[tePos] : null;
-			//if (tileEntity != null && (tileEntity is IEnergyReceiver || tileEntity is IEnergyProvider))
-			//{
-			//	switch (IO)
-			//	{
-			//		case Connection.In:
-			//			Main.spriteBatch.Draw(DawnOfIndustryCore.inTexture, position + new Vector2(4), Color.White);
-			//			break;
-			//		case Connection.Out:
-			//			Main.spriteBatch.Draw(DawnOfIndustryCore.outTexture, position + new Vector2(4), Color.White);
-			//			break;
-			//		case Connection.Both:
-			//			Main.spriteBatch.Draw(DawnOfIndustryCore.bothTexture, position + new Vector2(4), Color.White);
-			//			break;
-			//		case Connection.Blocked:
-			//			Main.spriteBatch.Draw(DawnOfIndustryCore.blockedTexture, position + new Vector2(4), Color.White);
-			//			break;
-			//	}
-			//}
+			Vector2 tePosVec = (position + Main.screenPosition) / 16;
+			Point16 tePos = BaseLib.Utility.Utility.TileEntityTopLeft((int)tePosVec.X, (int)tePosVec.Y);
+			TileEntity tileEntity = TileEntity.ByPosition.ContainsKey(tePos) ? TileEntity.ByPosition[tePos] : null;
+			if (tileEntity != null && (tileEntity is IEnergyReceiver || tileEntity is IEnergyProvider))
+			{
+				switch (IO)
+				{
+					case Connection.In:
+						Main.spriteBatch.Draw(DawnOfIndustryCore.inTexture, position + new Vector2(4), Color.White);
+						break;
+					case Connection.Out:
+						Main.spriteBatch.Draw(DawnOfIndustryCore.outTexture, position + new Vector2(4), Color.White);
+						break;
+					case Connection.Both:
+						Main.spriteBatch.Draw(DawnOfIndustryCore.bothTexture, position + new Vector2(4), Color.White);
+						break;
+					case Connection.Blocked:
+						Main.spriteBatch.Draw(DawnOfIndustryCore.blockedTexture, position + new Vector2(4), Color.White);
+						break;
+				}
+			}
 		}
+
+		public ElementInfo GetInfo() => new ElementInfo
+		{
+			Draw = true
+		};
 	}
 }

@@ -1,10 +1,6 @@
-﻿using System.Linq;
-using DawnOfIndustryCore.Items;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.Graphics.Effects;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -32,7 +28,7 @@ namespace DawnOfIndustryCore
 			}
 		}
 
-		
+
 
 		public override void UpdateDead()
 		{
@@ -72,21 +68,6 @@ namespace DawnOfIndustryCore
 			else if (electrified) damageSource = PlayerDeathReason.ByCustomReason(" forgot to not touch the wall outlet.");
 
 			return true;
-		}
-
-		public override void PreUpdate()
-		{
-			Keys[] pressedKeys = Main.keyState.GetPressedKeys();
-
-			if (pressedKeys.Contains(Keys.RightShift) && Main.mouseRight && Main.mouseRightRelease)
-			{
-				if (Main.LocalPlayer.HeldItem.type == mod.ItemType<Wrench>())
-				{
-					Wrench wrench = (Wrench)Main.LocalPlayer.HeldItem.modItem;
-					wrench.mode = wrench.mode.NextEnum();
-					Main.NewText("Current mode: " + wrench.mode);
-				}
-			}
 		}
 	}
 }

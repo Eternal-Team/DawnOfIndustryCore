@@ -59,9 +59,7 @@
     <Compile Include="Items\Armors\HazmatArmor.cs" />
     <Compile Include="Items\Cells\Cells.cs" />
     <Compile Include="Items\Cells\UraniumFuelRod.cs" />
-    <Compile Include="Items\Clock.cs" />
     <Compile Include="Items\Ores.cs" />
-    <Compile Include="Items\Power.cs" />
     <Compile Include="Items\Wires\HeatPipe.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Items\Wires\BaseWire.cs" />
@@ -73,6 +71,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DawnOfIndustryCore.cs" />
     <Compile Include="Wiring\Wire.cs" />
+    <Compile Include="Wiring\WireLayer.cs" />
     <Compile Include="Wiring\WireSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,8 +79,6 @@
     <Content Include="description.txt" />
     <Content Include="Textures\Buffs\Electrified.png" />
     <Content Include="Textures\Buffs\Radiation.png" />
-    <Content Include="Textures\Items\Clock.png" />
-    <Content Include="Textures\Items\Power.png" />
     <Content Include="Textures\Placeholder.png" />
     <Content Include="Textures\Tiles\HeatPipe.png" />
     <Content Include="Textures\Tiles\BasicWire.png" />
@@ -99,6 +96,9 @@
       <Project>{d0299735-6572-422a-8c71-ec93e42a8690}</Project>
       <Name>LayerLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Textures\Items\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
