@@ -1,5 +1,4 @@
 ﻿using DawnOfIndustryCore.Items.Wires;
-using DawnOfIndustryCore.Wiring;
 using EnergyLib.Energy;
 using LayerLib.Layer;
 using Microsoft.Xna.Framework;
@@ -18,7 +17,7 @@ namespace DawnOfIndustryCore.Power
 		Blocked
 	}
 
-	public class Wire : IMultiTile, ILayerElement
+	public class Wire : ILayerElement
 	{
 		public WireGrid grid;
 
@@ -50,13 +49,7 @@ namespace DawnOfIndustryCore.Power
 			Name = item.modItem.GetType().Name;
 			maxIO = ((BaseWire)item.modItem).maxIO;
 		}
-
-		public WireGrid GetGrid() => grid;
-
-		public void SetGrid(WireGrid grid) => this.grid = grid;
-
-		public long GetCapacity() => maxIO * 2;
-
+		
 		public void Frame()
 		{
 			CustomDictionary<Wire> wires = DawnOfIndustryCore.Instance.GetModWorld<DoIWorld>().wires.elements;
@@ -82,10 +75,10 @@ namespace DawnOfIndustryCore.Power
 
 				if (wire != null)
 				{
-					if (check.X == -1 && connections[BaseLib.Utility.Utility.Facing.Left] && wire.connections[BaseLib.Utility.Utility.Facing.Right]) GetGrid().MergeGrids(wire.GetGrid());
-					else if (check.X == 1 && connections[BaseLib.Utility.Utility.Facing.Right] && wire.connections[BaseLib.Utility.Utility.Facing.Left]) GetGrid().MergeGrids(wire.GetGrid());
-					if (check.Y == -1 && connections[BaseLib.Utility.Utility.Facing.Up] && wire.connections[BaseLib.Utility.Utility.Facing.Down]) GetGrid().MergeGrids(wire.GetGrid());
-					else if (check.Y == 1 && connections[BaseLib.Utility.Utility.Facing.Down] && wire.connections[BaseLib.Utility.Utility.Facing.Up]) GetGrid().MergeGrids(wire.GetGrid());
+					if (check.X == -1 && connections[BaseLib.Utility.Utility.Facing.Left] && wire.connections[BaseLib.Utility.Utility.Facing.Right]) grid.MergeGrids(wire.grid);
+					else if (check.X == 1 && connections[BaseLib.Utility.Utility.Facing.Right] && wire.connections[BaseLib.Utility.Utility.Facing.Left]) grid.MergeGrids(wire.grid);
+					if (check.Y == -1 && connections[BaseLib.Utility.Utility.Facing.Up] && wire.connections[BaseLib.Utility.Utility.Facing.Down]) grid.MergeGrids(wire.grid);
+					else if (check.Y == 1 && connections[BaseLib.Utility.Utility.Facing.Down] && wire.connections[BaseLib.Utility.Utility.Facing.Up]) grid.MergeGrids(wire.grid);
 				}
 			}
 		}

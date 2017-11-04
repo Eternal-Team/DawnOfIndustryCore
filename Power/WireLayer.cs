@@ -76,7 +76,7 @@ namespace DawnOfIndustryCore.Power
 
 				if (TileEntity.ByPosition.ContainsKey(check))
 				{
-					WireGrid grid = wire.GetGrid();
+					WireGrid grid = wire.grid;
 					TileEntity te = TileEntity.ByPosition[check];
 
 					if (wire.IO == Connection.In || wire.IO == Connection.Both)
@@ -114,7 +114,7 @@ namespace DawnOfIndustryCore.Power
 				grid.energy.SetMaxTransfer(wire.maxIO);
 				grid.energy.SetCapacity(wire.maxIO * 2);
 				grid.tiles.Add(wire);
-				wire.SetGrid(grid);
+				wire.grid = grid;
 
 				// Merges and frames the wire
 				wire.Merge();
@@ -135,8 +135,8 @@ namespace DawnOfIndustryCore.Power
 			Wire wire = elements[mouse];
 
 			elements.Remove(mouse);
-			wire.GetGrid().tiles.Remove(wire);
-			wire.GetGrid().ReformGrid();
+			wire.grid.tiles.Remove(wire);
+			wire.grid.ReformGrid();
 
 			foreach (Point16 check in BaseLib.Utility.Utility.CheckNeighbours()) if (elements.ContainsKey(mouse + check) && elements[mouse + check].type == wire.type) elements[mouse + check].Frame();
 
@@ -166,8 +166,8 @@ namespace DawnOfIndustryCore.Power
 						elements[mouse.X - 1, mouse.Y].connections[BaseLib.Utility.Utility.Facing.Right] = !elements[mouse.X - 1, mouse.Y].connections[BaseLib.Utility.Utility.Facing.Right];
 						if (wire.connections[BaseLib.Utility.Utility.Facing.Left])
 						{
-							Main.NewText(wire.GetGrid().tiles.Count + " " + elements[mouse.X - 1, mouse.Y].GetGrid().tiles.Count);
-							wire.GetGrid().MergeGrids(elements[mouse.X - 1, mouse.Y].GetGrid());
+							Main.NewText(wire.grid.tiles.Count + " " + elements[mouse.X - 1, mouse.Y].grid.tiles.Count);
+							wire.grid.MergeGrids(elements[mouse.X - 1, mouse.Y].grid);
 						}
 						elements[mouse.X - 1, mouse.Y].Frame();
 					}
@@ -182,7 +182,7 @@ namespace DawnOfIndustryCore.Power
 					if (elements.ContainsKey(mouse.X + 1, mouse.Y))
 					{
 						elements[mouse.X + 1, mouse.Y].connections[BaseLib.Utility.Utility.Facing.Left] = !elements[mouse.X + 1, mouse.Y].connections[BaseLib.Utility.Utility.Facing.Left];
-						if (wire.connections[BaseLib.Utility.Utility.Facing.Right]) wire.GetGrid().MergeGrids(elements[mouse.X + 1, mouse.Y].GetGrid());
+						if (wire.connections[BaseLib.Utility.Utility.Facing.Right]) wire.grid.MergeGrids(elements[mouse.X + 1, mouse.Y].grid);
 						elements[mouse.X + 1, mouse.Y].Frame();
 					}
 				}
@@ -196,7 +196,7 @@ namespace DawnOfIndustryCore.Power
 					if (elements.ContainsKey(mouse.X, mouse.Y - 1))
 					{
 						elements[mouse.X, mouse.Y - 1].connections[BaseLib.Utility.Utility.Facing.Down] = !elements[mouse.X, mouse.Y - 1].connections[BaseLib.Utility.Utility.Facing.Down];
-						if (wire.connections[BaseLib.Utility.Utility.Facing.Up]) wire.GetGrid().MergeGrids(elements[mouse.X, mouse.Y - 1].GetGrid());
+						if (wire.connections[BaseLib.Utility.Utility.Facing.Up]) wire.grid.MergeGrids(elements[mouse.X, mouse.Y - 1].grid);
 						elements[mouse.X, mouse.Y - 1].Frame();
 					}
 				}
@@ -210,7 +210,7 @@ namespace DawnOfIndustryCore.Power
 					if (elements.ContainsKey(mouse.X, mouse.Y + 1))
 					{
 						elements[mouse.X, mouse.Y + 1].connections[BaseLib.Utility.Utility.Facing.Up] = !elements[mouse.X, mouse.Y + 1].connections[BaseLib.Utility.Utility.Facing.Up];
-						if (wire.connections[BaseLib.Utility.Utility.Facing.Down]) wire.GetGrid().MergeGrids(elements[mouse.X, mouse.Y + 1].GetGrid());
+						if (wire.connections[BaseLib.Utility.Utility.Facing.Down]) wire.grid.MergeGrids(elements[mouse.X, mouse.Y + 1].grid);
 						elements[mouse.X, mouse.Y + 1].Frame();
 					}
 				}
@@ -222,10 +222,10 @@ namespace DawnOfIndustryCore.Power
 		{
 			Wire wire = elements[mouse];
 
-			Main.NewText("Tiles: " + wire.GetGrid().tiles.Count);
-			Main.NewText("Current capacity: " + wire.GetGrid().energy.GetCapacity());
-			Main.NewText("Current IO: " + wire.GetGrid().energy.GetMaxReceive() + "/" + wire.GetGrid().energy.GetMaxExtract());
-			Main.NewText("Current energy: " + wire.GetGrid().energy.GetEnergy());
+			Main.NewText("Tiles: " + wire.grid.tiles.Count);
+			Main.NewText("Current capacity: " + wire.grid.energy.GetCapacity());
+			Main.NewText("Current IO: " + wire.grid.energy.GetMaxReceive() + "/" + wire.grid.energy.GetMaxExtract());
+			Main.NewText("Current energy: " + wire.grid.energy.GetEnergy());
 		}
 
 		public CustomDictionary<ILayerElement> GetElements() => elements.ToDictionary();

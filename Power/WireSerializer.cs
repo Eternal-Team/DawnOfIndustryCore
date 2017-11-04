@@ -16,7 +16,7 @@ namespace DawnOfIndustryCore.Power
 			["IO"] = (int)value.IO,
 			["Facing"] = value.connections.Keys.Select(x => (int)x).ToList(),
 			["Connection"] = value.connections.Values.ToList(),
-			["Energy"] = value.GetGrid().GetEnergySharePerNode()
+			["Energy"] = value.grid.GetEnergySharePerNode()
 		};
 
 		public override Wire Deserialize(TagCompound tag)

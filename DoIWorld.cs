@@ -42,7 +42,7 @@ namespace DawnOfIndustryCore
 					grid.tiles.Add(wire);
 					grid.energy.ModifyEnergyStored(wire.share);
 					wire.share = 0;
-					wire.SetGrid(grid);
+					wire.grid = grid;
 				}
 				foreach (Wire wire in wires.elements.Values) wire.Merge();
 

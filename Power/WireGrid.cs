@@ -17,8 +17,8 @@ namespace DawnOfIndustryCore.Power
 			if (!tiles.Contains(tile))
 			{
 				energy.AddCapacity(tile.maxIO * 2);
-				energy.ModifyEnergyStored(tile.GetGrid().GetEnergySharePerNode());
-				tile.SetGrid(this);
+				energy.ModifyEnergyStored(tile.grid.GetEnergySharePerNode());
+				tile.grid = this;
 				tiles.Add(tile);
 			}
 		}
@@ -39,7 +39,7 @@ namespace DawnOfIndustryCore.Power
 				newGrid.energy.SetCapacity(tiles[i].maxIO * 2);
 				newGrid.energy.ModifyEnergyStored(GetEnergySharePerNode());
 				newGrid.tiles.Add(tiles[i]);
-				tiles[i].SetGrid(newGrid);
+				tiles[i].grid = newGrid;
 			}
 
 			for (int i = 0; i < tiles.Count; i++) tiles[i].Merge();

@@ -72,7 +72,6 @@
     <Compile Include="Heat\HeatStorage\IHeatProvider.cs" />
     <Compile Include="Heat\HeatStorage\IHeatReceiver.cs" />
     <Compile Include="Heat\HeatStorage\IHeatStorage.cs" />
-    <Compile Include="Power\IMultiTile.cs" />
     <Compile Include="Power\WireGrid.cs" />
     <Compile Include="Items\Wrench.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
