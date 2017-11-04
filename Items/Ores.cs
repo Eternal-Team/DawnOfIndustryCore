@@ -1,6 +1,6 @@
 ﻿using BaseLib.Items;
+using BaseLib.Utility;
 using DawnOfIndustryCore.Buffs;
-using DawnOfIndustryCore.Items.Armors;
 using Terraria;
 
 namespace DawnOfIndustryCore.Items
@@ -30,7 +30,7 @@ namespace DawnOfIndustryCore.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Yellowcake");
-			Tooltip.SetDefault("Chemical formula: U₃O₈");
+			Tooltip.SetDefault($"Chemical formula: U{3.Subscript()}O{8.Subscript()}");
 		}
 
 		public override void SetDefaults()
@@ -38,12 +38,12 @@ namespace DawnOfIndustryCore.Items
 			item.width = 20;
 			item.height = 18;
 			item.maxStack = 999;
-			item.value = Item.sellPrice(0, 0, 3, 0);
+			item.value = Item.sellPrice(0, 0, 3);
 		}
 
 		public override void UpdateInventory(Player player)
 		{
-			if (player.armor[0].type != mod.ItemType<HazmatHelmet>() && player.armor[1].type != mod.ItemType<HazmatChestplate>() && player.armor[2].type != mod.ItemType<HazmatLeggings>()) player.AddBuff(mod.BuffType<Radiation>(), 36000);
+			if (!player.WearsHazmat()) player.AddBuff(mod.BuffType<Radiation>(), 36000);
 		}
 	}
 
@@ -61,7 +61,7 @@ namespace DawnOfIndustryCore.Items
 			item.width = 12;
 			item.height = 12;
 			item.maxStack = 999;
-			item.value = Item.sellPrice(0, 0, 70, 0);
+			item.value = Item.sellPrice(0, 0, 70);
 		}
 	}
 }

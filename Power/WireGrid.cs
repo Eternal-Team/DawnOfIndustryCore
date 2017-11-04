@@ -1,16 +1,16 @@
 ﻿using EnergyLib.Energy;
 using System.Collections.Generic;
 
-namespace DawnOfIndustryCore.Wiring
+namespace DawnOfIndustryCore.Power
 {
-	public class MultiTileGrid
+	public class WireGrid
 	{
-		public IList<Wire> tiles = new List<Wire>();
+		public List<Wire> tiles = new List<Wire>();
 		public EnergyStorage energy = new EnergyStorage(10000, 1000);
 
 		public long GetCapacitySharePerNode() => energy.GetCapacity() / tiles.Count;
 
-		public long GetEnergySharePerNode() => energy.GetEnergyStored() / tiles.Count;
+		public long GetEnergySharePerNode() => energy.GetEnergy() / tiles.Count;
 
 		public void AddTile(Wire tile)
 		{
@@ -23,16 +23,18 @@ namespace DawnOfIndustryCore.Wiring
 			}
 		}
 
-		public void MergeGrids(MultiTileGrid multiTileGrid)
+		public void MergeGrids(WireGrid wireGrid)
 		{
-			for (int i = 0; i < multiTileGrid.tiles.Count; i++) AddTile(multiTileGrid.tiles[i]);
+			for (int i = 0; i < wireGrid.tiles.Count; i++) AddTile(wireGrid.tiles[i]);
 		}
 
 		public void ReformGrid()
 		{
+			Terraria.Main.NewText(tiles.Count);
+
 			for (int i = 0; i < tiles.Count; i++)
 			{
-				MultiTileGrid newGrid = new MultiTileGrid();
+				WireGrid newGrid = new WireGrid();
 				newGrid.energy.SetMaxTransfer(tiles[i].maxIO);
 				newGrid.energy.SetCapacity(tiles[i].maxIO * 2);
 				newGrid.energy.ModifyEnergyStored(GetEnergySharePerNode());

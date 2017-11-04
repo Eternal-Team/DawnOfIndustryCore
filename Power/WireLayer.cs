@@ -1,18 +1,17 @@
 ﻿using DawnOfIndustryCore.Items.Wires;
 using EnergyLib.Energy;
+using LayerLib;
+using LayerLib.Items;
 using LayerLib.Layer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
-using LayerLib;
-using LayerLib.Items;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
-using static BaseLib.Utility.Utility;
 
-namespace DawnOfIndustryCore.Wiring
+namespace DawnOfIndustryCore.Power
 {
 	public class WireLayer : ILayer
 	{
@@ -62,7 +61,7 @@ namespace DawnOfIndustryCore.Wiring
 
 		public void DrawPreview()
 		{
-			Point16 mouse = MouseToWorldPoint();
+			Point16 mouse = BaseLib.Utility.Utility.MouseToWorldPoint();
 
 			// Draws wire preview
 			if (Main.LocalPlayer.inventory.Any(x => x.modItem is BaseWire) && !elements.ContainsKey(mouse))
@@ -73,23 +72,23 @@ namespace DawnOfIndustryCore.Wiring
 		{
 			foreach (Wire wire in elements.Values)
 			{
-				Point16 check = TileEntityTopLeft(wire.position.X, wire.position.Y);
+				Point16 check = BaseLib.Utility.Utility.TileEntityTopLeft(wire.position.X, wire.position.Y);
 
 				if (TileEntity.ByPosition.ContainsKey(check))
 				{
-					MultiTileGrid grid = wire.GetGrid();
+					WireGrid grid = wire.GetGrid();
 					TileEntity te = TileEntity.ByPosition[check];
 
 					if (wire.IO == Connection.In || wire.IO == Connection.Both)
 						(te as IEnergyProvider)?
 							.GetEnergyStorage()
 							.ModifyEnergyStored(
-								-grid.energy.ReceiveEnergy(Min(grid.energy.GetMaxReceive(), grid.energy.GetCapacity() - grid.energy.GetEnergyStored(), ((IEnergyProvider)te).GetEnergyStorage().GetEnergyStored())));
+								-grid.energy.ReceiveEnergy(BaseLib.Utility.Utility.Min(grid.energy.GetMaxReceive(), grid.energy.GetCapacity() - grid.energy.GetEnergy(), ((IEnergyProvider)te).GetEnergyStorage().GetEnergy())));
 
 					if (wire.IO == Connection.Out || wire.IO == Connection.Both)
 						(te as IEnergyReceiver)?
 							.GetEnergyStorage()
-							.ModifyEnergyStored(grid.energy.ExtractEnergy(Min(grid.energy.GetMaxExtract(), grid.energy.GetEnergyStored(), ((IEnergyReceiver)te).GetCapacity() - ((IEnergyReceiver)te).GetEnergyStored())));
+							.ModifyEnergyStored(grid.energy.ExtractEnergy(BaseLib.Utility.Utility.Min(grid.energy.GetMaxExtract(), grid.energy.GetEnergy(), ((IEnergyReceiver)te).GetCapacity() - ((IEnergyReceiver)te).GetEnergy())));
 				}
 			}
 		}
@@ -111,7 +110,7 @@ namespace DawnOfIndustryCore.Wiring
 				elements.Add(mouse, wire);
 
 				// Creates a grid and set base values
-				MultiTileGrid grid = new MultiTileGrid();
+				WireGrid grid = new WireGrid();
 				grid.energy.SetMaxTransfer(wire.maxIO);
 				grid.energy.SetCapacity(wire.maxIO * 2);
 				grid.tiles.Add(wire);
@@ -122,7 +121,7 @@ namespace DawnOfIndustryCore.Wiring
 				wire.Frame();
 
 				// Frames all surrounding wires
-				foreach (Point16 add in CheckNeighbours())
+				foreach (Point16 add in BaseLib.Utility.Utility.CheckNeighbours())
 					if (elements.ContainsKey(mouse.X + add.X, mouse.Y + add.Y))
 					{
 						Wire merge = elements[mouse + add];
@@ -135,11 +134,11 @@ namespace DawnOfIndustryCore.Wiring
 		{
 			Wire wire = elements[mouse];
 
+			elements.Remove(mouse);
 			wire.GetGrid().tiles.Remove(wire);
 			wire.GetGrid().ReformGrid();
-			elements.Remove(mouse);
 
-			foreach (Point16 check in CheckNeighbours()) if (elements.ContainsKey(mouse + check) && elements[mouse + check].type == wire.type) elements[mouse + check].Frame();
+			foreach (Point16 check in BaseLib.Utility.Utility.CheckNeighbours()) if (elements.ContainsKey(mouse + check) && elements[mouse + check].type == wire.type) elements[mouse + check].Frame();
 
 			player.PutItemInInventory(wire.type);
 		}
@@ -154,18 +153,18 @@ namespace DawnOfIndustryCore.Wiring
 			Rectangle io = new Rectangle(4, 4, 8, 8);
 			if (!io.Contains(x, y))
 			{
-				if (PointInTriangle(new Point(x, y), new Point(0, 0), new Point(8, 8), new Point(0, 16)))
+				if (BaseLib.Utility.Utility.PointInTriangle(new Point(x, y), new Point(0, 0), new Point(8, 8), new Point(0, 16)))
 				{
-					wire.connections[Facing.Left] = !wire.connections[Facing.Left];
+					wire.connections[BaseLib.Utility.Utility.Facing.Left] = !wire.connections[BaseLib.Utility.Utility.Facing.Left];
 					wire.Frame();
 
 					Main.NewText(wire.grid.tiles.Count.ToString());
-					if (!wire.connections[Facing.Left]) wire.grid.ReformGrid();
+					if (!wire.connections[BaseLib.Utility.Utility.Facing.Left]) wire.grid.ReformGrid();
 
 					if (elements.ContainsKey(mouse.X - 1, mouse.Y))
 					{
-						elements[mouse.X - 1, mouse.Y].connections[Facing.Right] = !elements[mouse.X - 1, mouse.Y].connections[Facing.Right];
-						if (wire.connections[Facing.Left])
+						elements[mouse.X - 1, mouse.Y].connections[BaseLib.Utility.Utility.Facing.Right] = !elements[mouse.X - 1, mouse.Y].connections[BaseLib.Utility.Utility.Facing.Right];
+						if (wire.connections[BaseLib.Utility.Utility.Facing.Left])
 						{
 							Main.NewText(wire.GetGrid().tiles.Count + " " + elements[mouse.X - 1, mouse.Y].GetGrid().tiles.Count);
 							wire.GetGrid().MergeGrids(elements[mouse.X - 1, mouse.Y].GetGrid());
@@ -173,45 +172,45 @@ namespace DawnOfIndustryCore.Wiring
 						elements[mouse.X - 1, mouse.Y].Frame();
 					}
 				}
-				else if (PointInTriangle(new Point(x, y), new Point(16, 0), new Point(16, 16), new Point(8, 8)))
+				else if (BaseLib.Utility.Utility.PointInTriangle(new Point(x, y), new Point(16, 0), new Point(16, 16), new Point(8, 8)))
 				{
-					wire.connections[Facing.Right] = !wire.connections[Facing.Right];
+					wire.connections[BaseLib.Utility.Utility.Facing.Right] = !wire.connections[BaseLib.Utility.Utility.Facing.Right];
 					wire.Frame();
 
-					if (!wire.connections[Facing.Right]) wire.grid.ReformGrid();
+					if (!wire.connections[BaseLib.Utility.Utility.Facing.Right]) wire.grid.ReformGrid();
 
 					if (elements.ContainsKey(mouse.X + 1, mouse.Y))
 					{
-						elements[mouse.X + 1, mouse.Y].connections[Facing.Left] = !elements[mouse.X + 1, mouse.Y].connections[Facing.Left];
-						if (wire.connections[Facing.Right]) wire.GetGrid().MergeGrids(elements[mouse.X + 1, mouse.Y].GetGrid());
+						elements[mouse.X + 1, mouse.Y].connections[BaseLib.Utility.Utility.Facing.Left] = !elements[mouse.X + 1, mouse.Y].connections[BaseLib.Utility.Utility.Facing.Left];
+						if (wire.connections[BaseLib.Utility.Utility.Facing.Right]) wire.GetGrid().MergeGrids(elements[mouse.X + 1, mouse.Y].GetGrid());
 						elements[mouse.X + 1, mouse.Y].Frame();
 					}
 				}
-				else if (PointInTriangle(new Point(x, y), new Point(0, 0), new Point(16, 0), new Point(8, 8)))
+				else if (BaseLib.Utility.Utility.PointInTriangle(new Point(x, y), new Point(0, 0), new Point(16, 0), new Point(8, 8)))
 				{
-					wire.connections[Facing.Up] = !wire.connections[Facing.Up];
+					wire.connections[BaseLib.Utility.Utility.Facing.Up] = !wire.connections[BaseLib.Utility.Utility.Facing.Up];
 					wire.Frame();
 
-					if (!wire.connections[Facing.Up]) wire.grid.ReformGrid();
+					if (!wire.connections[BaseLib.Utility.Utility.Facing.Up]) wire.grid.ReformGrid();
 
 					if (elements.ContainsKey(mouse.X, mouse.Y - 1))
 					{
-						elements[mouse.X, mouse.Y - 1].connections[Facing.Down] = !elements[mouse.X, mouse.Y - 1].connections[Facing.Down];
-						if (wire.connections[Facing.Up]) wire.GetGrid().MergeGrids(elements[mouse.X, mouse.Y - 1].GetGrid());
+						elements[mouse.X, mouse.Y - 1].connections[BaseLib.Utility.Utility.Facing.Down] = !elements[mouse.X, mouse.Y - 1].connections[BaseLib.Utility.Utility.Facing.Down];
+						if (wire.connections[BaseLib.Utility.Utility.Facing.Up]) wire.GetGrid().MergeGrids(elements[mouse.X, mouse.Y - 1].GetGrid());
 						elements[mouse.X, mouse.Y - 1].Frame();
 					}
 				}
-				else if (PointInTriangle(new Point(x, y), new Point(0, 16), new Point(8, 8), new Point(16, 16)))
+				else if (BaseLib.Utility.Utility.PointInTriangle(new Point(x, y), new Point(0, 16), new Point(8, 8), new Point(16, 16)))
 				{
-					wire.connections[Facing.Down] = !wire.connections[Facing.Down];
+					wire.connections[BaseLib.Utility.Utility.Facing.Down] = !wire.connections[BaseLib.Utility.Utility.Facing.Down];
 					wire.Frame();
 
-					if (!wire.connections[Facing.Down]) wire.grid.ReformGrid();
+					if (!wire.connections[BaseLib.Utility.Utility.Facing.Down]) wire.grid.ReformGrid();
 
 					if (elements.ContainsKey(mouse.X, mouse.Y + 1))
 					{
-						elements[mouse.X, mouse.Y + 1].connections[Facing.Up] = !elements[mouse.X, mouse.Y + 1].connections[Facing.Up];
-						if (wire.connections[Facing.Down]) wire.GetGrid().MergeGrids(elements[mouse.X, mouse.Y + 1].GetGrid());
+						elements[mouse.X, mouse.Y + 1].connections[BaseLib.Utility.Utility.Facing.Up] = !elements[mouse.X, mouse.Y + 1].connections[BaseLib.Utility.Utility.Facing.Up];
+						if (wire.connections[BaseLib.Utility.Utility.Facing.Down]) wire.GetGrid().MergeGrids(elements[mouse.X, mouse.Y + 1].GetGrid());
 						elements[mouse.X, mouse.Y + 1].Frame();
 					}
 				}
@@ -226,7 +225,7 @@ namespace DawnOfIndustryCore.Wiring
 			Main.NewText("Tiles: " + wire.GetGrid().tiles.Count);
 			Main.NewText("Current capacity: " + wire.GetGrid().energy.GetCapacity());
 			Main.NewText("Current IO: " + wire.GetGrid().energy.GetMaxReceive() + "/" + wire.GetGrid().energy.GetMaxExtract());
-			Main.NewText("Current energy: " + wire.GetGrid().energy.GetEnergyStored());
+			Main.NewText("Current energy: " + wire.GetGrid().energy.GetEnergy());
 		}
 
 		public CustomDictionary<ILayerElement> GetElements() => elements.ToDictionary();
@@ -237,7 +236,7 @@ namespace DawnOfIndustryCore.Wiring
 			Name = "Wires",
 			Texture = DawnOfIndustryCore.PlaceholderTexturePath,
 			Draw = LayerManager.ActiveLayer == this,
-			DrawPreview = (HeldItem.modItem as LayerTool)?.mode == LayerTool.Mode.Place
+			DrawPreview = (BaseLib.Utility.Utility.HeldItem.modItem as LayerTool)?.mode == LayerTool.Mode.Place
 		};
 	}
 }

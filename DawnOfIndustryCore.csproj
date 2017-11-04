@@ -61,18 +61,27 @@
     <Compile Include="Items\Cells\UraniumFuelRod.cs" />
     <Compile Include="Items\Ores.cs" />
     <Compile Include="Items\Wires\HeatPipe.cs" />
+    <Compile Include="UI\UIEnergyBar.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Items\Wires\BaseWire.cs" />
-    <Compile Include="Tiles\HeatPipe.cs" />
     <Compile Include="Items\Wires\BasicWire.cs" />
-    <Compile Include="Wiring\IMultiTile.cs" />
-    <Compile Include="Wiring\MultiTileGrid.cs" />
+    <Compile Include="Heat\HeatPipeLayer.cs" />
+    <Compile Include="Heat\HeatPipeGrid.cs" />
+    <Compile Include="Heat\HeatStorage\HeatStorage.cs" />
+    <Compile Include="Heat\HeatStorage\IHeatHandler.cs" />
+    <Compile Include="Heat\HeatStorage\IHeatProvider.cs" />
+    <Compile Include="Heat\HeatStorage\IHeatReceiver.cs" />
+    <Compile Include="Heat\HeatStorage\IHeatStorage.cs" />
+    <Compile Include="Power\IMultiTile.cs" />
+    <Compile Include="Power\WireGrid.cs" />
     <Compile Include="Items\Wrench.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DawnOfIndustryCore.cs" />
-    <Compile Include="Wiring\Wire.cs" />
-    <Compile Include="Wiring\WireLayer.cs" />
-    <Compile Include="Wiring\WireSerializer.cs" />
+    <Compile Include="Heat\HeatPipe.cs" />
+    <Compile Include="Power\Wire.cs" />
+    <Compile Include="Power\WireLayer.cs" />
+    <Compile Include="Heat\HeatPipeSerializer.cs" />
+    <Compile Include="Power\WireSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="build.txt" />
@@ -82,6 +91,8 @@
     <Content Include="Textures\Placeholder.png" />
     <Content Include="Textures\Tiles\HeatPipe.png" />
     <Content Include="Textures\Tiles\BasicWire.png" />
+    <Content Include="UI\BarCorner.png" />
+    <Content Include="UI\BarSide.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseLib\BaseLib.csproj">
@@ -99,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Textures\Items\" />
+    <Folder Include="Tiles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
