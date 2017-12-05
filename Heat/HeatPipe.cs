@@ -1,9 +1,10 @@
-﻿using LayerLib.Layer;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using TheOneLibrary.Layer.Layer;
+using Facing = TheOneLibrary.Utility.Utility.Facing;
 
 namespace DawnOfIndustryCore.Heat
 {
@@ -17,14 +18,14 @@ namespace DawnOfIndustryCore.Heat
 		public short frameX;
 		public short frameY;
 
-		public Dictionary<BaseLib.Utility.Utility.Facing, bool> connections = new Dictionary<BaseLib.Utility.Utility.Facing, bool>(4);
+		public Dictionary<Facing, bool> connections = new Dictionary<Facing, bool>(4);
 
 		public HeatPipe()
 		{
-			connections.Add(BaseLib.Utility.Utility.Facing.Left, true);
-			connections.Add(BaseLib.Utility.Utility.Facing.Right, true);
-			connections.Add(BaseLib.Utility.Utility.Facing.Up, true);
-			connections.Add(BaseLib.Utility.Utility.Facing.Down, true);
+			connections.Add(Facing.Left, true);
+			connections.Add(Facing.Right, true);
+			connections.Add(Facing.Up, true);
+			connections.Add(Facing.Down, true);
 		}
 
 		public void SetDefaults(int type)
@@ -52,7 +53,7 @@ namespace DawnOfIndustryCore.Heat
 		{
 			CustomDictionary<HeatPipe> heatPipes = DawnOfIndustryCore.Instance.GetModWorld<DoIWorld>().heatPipes.elements;
 
-			foreach (Point16 check in BaseLib.Utility.Utility.CheckNeighbours())
+			foreach (Point16 check in TheOneLibrary.Utility.Utility.CheckNeighbours())
 			{
 				Point16 point = new Point16(position.X + check.X, position.Y + check.Y);
 

@@ -1,5 +1,5 @@
-﻿using EnergyLib.Energy;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using TheOneLibrary.Energy.Energy;
 
 namespace DawnOfIndustryCore.Power
 {

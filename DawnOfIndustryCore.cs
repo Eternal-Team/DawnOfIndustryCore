@@ -1,6 +1,4 @@
-﻿using BaseLib.Utility;
-using DawnOfIndustryCore.Heat;
-using DawnOfIndustryCore.Heat.HeatStorage;
+﻿using DawnOfIndustryCore.Heat;
 using DawnOfIndustryCore.Power;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.OS;
@@ -8,6 +6,7 @@ using System;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using TheOneLibrary.Utility;
 
 namespace DawnOfIndustryCore
 {
@@ -55,7 +54,6 @@ namespace DawnOfIndustryCore
 
 			TagSerializer.AddSerializer(new WireSerializer());
 			TagSerializer.AddSerializer(new HeatPipeSerializer());
-			TagSerializer.AddSerializer(new HeatSerializer());
 
 			if (!Main.dedServ)
 			{

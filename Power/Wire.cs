@@ -1,11 +1,12 @@
 ﻿using DawnOfIndustryCore.Items.Wires;
-using EnergyLib.Energy;
-using LayerLib.Layer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using TheOneLibrary.Energy.Energy;
+using TheOneLibrary.Layer.Layer;
+using static TheOneLibrary.Utility.Utility.Facing;
 
 namespace DawnOfIndustryCore.Power
 {
@@ -31,14 +32,14 @@ namespace DawnOfIndustryCore.Power
 
 		public Connection IO = Connection.Both;
 
-		public IDictionary<BaseLib.Utility.Utility.Facing, bool> connections = new Dictionary<BaseLib.Utility.Utility.Facing, bool>(4);
+		public IDictionary<TheOneLibrary.Utility.Utility.Facing, bool> connections = new Dictionary<TheOneLibrary.Utility.Utility.Facing, bool>(4);
 
 		public Wire()
 		{
-			connections.Add(BaseLib.Utility.Utility.Facing.Left, true);
-			connections.Add(BaseLib.Utility.Utility.Facing.Right, true);
-			connections.Add(BaseLib.Utility.Utility.Facing.Up, true);
-			connections.Add(BaseLib.Utility.Utility.Facing.Down, true);
+			connections.Add(Left, true);
+			connections.Add(Right, true);
+			connections.Add(Up, true);
+			connections.Add(Down, true);
 		}
 
 		public void SetDefaults(int type)
@@ -49,7 +50,7 @@ namespace DawnOfIndustryCore.Power
 			Name = item.modItem.GetType().Name;
 			maxIO = ((BaseWire)item.modItem).maxIO;
 		}
-		
+
 		public void Frame()
 		{
 			CustomDictionary<Wire> wires = DawnOfIndustryCore.Instance.GetModWorld<DoIWorld>().wires.elements;
@@ -57,17 +58,17 @@ namespace DawnOfIndustryCore.Power
 			frameX = 0;
 			frameY = 0;
 
-			if (wires.ContainsKey(position.X - 1, position.Y) && wires[position.X - 1, position.Y].type == type && connections[BaseLib.Utility.Utility.Facing.Left]) frameX += 18;
-			if (wires.ContainsKey(position.X + 1, position.Y) && wires[position.X + 1, position.Y].type == type && connections[BaseLib.Utility.Utility.Facing.Right]) frameX += 36;
-			if (wires.ContainsKey(position.X, position.Y - 1) && wires[position.X, position.Y - 1].type == type && connections[BaseLib.Utility.Utility.Facing.Up]) frameY += 18;
-			if (wires.ContainsKey(position.X, position.Y + 1) && wires[position.X, position.Y + 1].type == type && connections[BaseLib.Utility.Utility.Facing.Down]) frameY += 36;
+			if (wires.ContainsKey(position.X - 1, position.Y) && wires[position.X - 1, position.Y].type == type && connections[Left]) frameX += 18;
+			if (wires.ContainsKey(position.X + 1, position.Y) && wires[position.X + 1, position.Y].type == type && connections[Right]) frameX += 36;
+			if (wires.ContainsKey(position.X, position.Y - 1) && wires[position.X, position.Y - 1].type == type && connections[Up]) frameY += 18;
+			if (wires.ContainsKey(position.X, position.Y + 1) && wires[position.X, position.Y + 1].type == type && connections[Down]) frameY += 36;
 		}
 
 		public void Merge()
 		{
 			CustomDictionary<Wire> wires = DawnOfIndustryCore.Instance.GetModWorld<DoIWorld>().wires.elements;
 
-			foreach (Point16 check in BaseLib.Utility.Utility.CheckNeighbours())
+			foreach (Point16 check in TheOneLibrary.Utility.Utility.CheckNeighbours())
 			{
 				Point16 point = position + check;
 
@@ -75,10 +76,10 @@ namespace DawnOfIndustryCore.Power
 
 				if (wire != null)
 				{
-					if (check.X == -1 && connections[BaseLib.Utility.Utility.Facing.Left] && wire.connections[BaseLib.Utility.Utility.Facing.Right]) grid.MergeGrids(wire.grid);
-					else if (check.X == 1 && connections[BaseLib.Utility.Utility.Facing.Right] && wire.connections[BaseLib.Utility.Utility.Facing.Left]) grid.MergeGrids(wire.grid);
-					if (check.Y == -1 && connections[BaseLib.Utility.Utility.Facing.Up] && wire.connections[BaseLib.Utility.Utility.Facing.Down]) grid.MergeGrids(wire.grid);
-					else if (check.Y == 1 && connections[BaseLib.Utility.Utility.Facing.Down] && wire.connections[BaseLib.Utility.Utility.Facing.Up]) grid.MergeGrids(wire.grid);
+					if (check.X == -1 && connections[Left] && wire.connections[Right]) grid.MergeGrids(wire.grid);
+					else if (check.X == 1 && connections[Right] && wire.connections[Left]) grid.MergeGrids(wire.grid);
+					if (check.Y == -1 && connections[Up] && wire.connections[Down]) grid.MergeGrids(wire.grid);
+					else if (check.Y == 1 && connections[Down] && wire.connections[Up]) grid.MergeGrids(wire.grid);
 				}
 			}
 		}
@@ -88,7 +89,7 @@ namespace DawnOfIndustryCore.Power
 			spriteBatch.Draw(DawnOfIndustryCore.wireTexture, position, new Rectangle(frameX, frameY, 16, 16), Color.White, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
 
 			Vector2 tePosVec = (position + Main.screenPosition) / 16;
-			Point16 tePos = BaseLib.Utility.Utility.TileEntityTopLeft((int)tePosVec.X, (int)tePosVec.Y);
+			Point16 tePos = TheOneLibrary.Utility.Utility.TileEntityTopLeft((int)tePosVec.X, (int)tePosVec.Y);
 			TileEntity tileEntity = TileEntity.ByPosition.ContainsKey(tePos) ? TileEntity.ByPosition[tePos] : null;
 			if (tileEntity != null && (tileEntity is IEnergyReceiver || tileEntity is IEnergyProvider))
 			{

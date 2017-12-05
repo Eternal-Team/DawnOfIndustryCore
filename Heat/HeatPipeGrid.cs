@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TheOneLibrary.Heat.Heat;
 
 namespace DawnOfIndustryCore.Heat
 {
@@ -6,7 +7,7 @@ namespace DawnOfIndustryCore.Heat
 	{
 		public List<HeatPipe> tiles = new List<HeatPipe>();
 
-		public HeatStorage.HeatStorage heatStorage = new HeatStorage.HeatStorage(10000, 1000);
+		public HeatStorage heatStorage = new HeatStorage(10000, 1000);
 
 		public void AddTile(HeatPipe tile)
 		{

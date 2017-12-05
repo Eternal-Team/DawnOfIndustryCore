@@ -1,5 +1,5 @@
-﻿using BaseLib.Items;
-using Terraria;
+﻿using Terraria;
+using TheOneLibrary.Base.Items;
 
 namespace DawnOfIndustryCore.Items.Wires
 {

@@ -2,6 +2,7 @@
 using System.Linq;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
+using static TheOneLibrary.Utility.Utility;
 
 namespace DawnOfIndustryCore.Power
 {
@@ -28,7 +29,7 @@ namespace DawnOfIndustryCore.Power
 			wire.frameX = tag.GetShort("frameX");
 			wire.frameY = tag.GetShort("frameY");
 			wire.IO = (Connection)tag.GetInt("IO");
-			wire.connections = tag.GetList<int>("Facing").Select(x => (BaseLib.Utility.Utility.Facing)x).Zip(tag.GetList<bool>("Connection"), (x, y) => new KeyValuePair<BaseLib.Utility.Utility.Facing, bool>(x, y)).ToDictionary(x => x.Key, x => x.Value);
+			wire.connections = tag.GetList<int>("Facing").Select(x => (Facing)x).Zip(tag.GetList<bool>("Connection"), (x, y) => new KeyValuePair<Facing, bool>(x, y)).ToDictionary(x => x.Key, x => x.Value);
 			wire.share = tag.GetLong("Energy");
 			return wire;
 		}

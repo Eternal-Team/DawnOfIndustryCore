@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -61,19 +62,12 @@
     <Compile Include="Items\Cells\UraniumFuelRod.cs" />
     <Compile Include="Items\Ores.cs" />
     <Compile Include="Items\Wires\HeatPipe.cs" />
-    <Compile Include="UI\UIEnergyBar.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Items\Wires\BaseWire.cs" />
     <Compile Include="Items\Wires\BasicWire.cs" />
     <Compile Include="Heat\HeatPipeLayer.cs" />
     <Compile Include="Heat\HeatPipeGrid.cs" />
-    <Compile Include="Heat\HeatStorage\HeatStorage.cs" />
-    <Compile Include="Heat\HeatStorage\IHeatHandler.cs" />
-    <Compile Include="Heat\HeatStorage\IHeatProvider.cs" />
-    <Compile Include="Heat\HeatStorage\IHeatReceiver.cs" />
-    <Compile Include="Heat\HeatStorage\IHeatStorage.cs" />
     <Compile Include="Power\WireGrid.cs" />
-    <Compile Include="Items\Wrench.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DawnOfIndustryCore.cs" />
     <Compile Include="Heat\HeatPipe.cs" />
@@ -90,26 +84,16 @@
     <Content Include="Textures\Placeholder.png" />
     <Content Include="Textures\Tiles\HeatPipe.png" />
     <Content Include="Textures\Tiles\BasicWire.png" />
-    <Content Include="UI\BarCorner.png" />
-    <Content Include="UI\BarSide.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BaseLib\BaseLib.csproj">
-      <Project>{6812d262-8588-4999-a01d-a6ddc71ed4c0}</Project>
-      <Name>BaseLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EnergyLib\EnergyLib.csproj">
-      <Project>{8664C658-9619-4EA2-9F3C-4EC31FBF8C99}</Project>
-      <Name>EnergyLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LayerLib\LayerLib.csproj">
-      <Project>{d0299735-6572-422a-8c71-ec93e42a8690}</Project>
-      <Name>LayerLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Textures\Items\" />
     <Folder Include="Tiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TheOneLibrary\TheOneLibrary.csproj">
+      <Project>{FE14625B-5827-4C2C-B11B-DE3F22AE17B2}</Project>
+      <Name>TheOneLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

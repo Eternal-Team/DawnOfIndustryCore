@@ -1,6 +1,6 @@
-﻿using BaseLib.Items;
-using Terraria;
+﻿using Terraria;
 using Terraria.ModLoader;
+using TheOneLibrary.Base.Items;
 
 namespace DawnOfIndustryCore.Items.Armors
 {

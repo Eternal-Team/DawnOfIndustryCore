@@ -1,14 +1,15 @@
-﻿using DawnOfIndustryCore.Heat.HeatStorage;
-using LayerLib;
-using LayerLib.Items;
-using LayerLib.Layer;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
+using TheOneLibrary.Heat.Heat;
+using TheOneLibrary.Layer;
+using TheOneLibrary.Layer.Items;
+using TheOneLibrary.Layer.Layer;
+using TheOneLibrary.Utility;
 
 namespace DawnOfIndustryCore.Heat
 {
@@ -60,7 +61,7 @@ namespace DawnOfIndustryCore.Heat
 
 		public void DrawPreview()
 		{
-			Point16 mouse = BaseLib.Utility.Utility.MouseToWorldPoint();
+			Point16 mouse = TheOneLibrary.Utility.Utility.MouseToWorldPoint();
 
 			if (Main.LocalPlayer.inventory.Any(x => x.modItem is Items.Wires.HeatPipe) && !elements.ContainsKey(mouse))
 				Main.spriteBatch.Draw(DawnOfIndustryCore.heatPipeTexture, mouse.ToVector2() * 16 - Main.screenPosition, new Rectangle(0, 0, 16, 16), Color.White * 0.5f, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0f);
@@ -70,7 +71,7 @@ namespace DawnOfIndustryCore.Heat
 		{
 			foreach (HeatPipe heatPipe in elements.Values)
 			{
-				Point16 check = BaseLib.Utility.Utility.TileEntityTopLeft(heatPipe.position.X, heatPipe.position.Y);
+				Point16 check = TheOneLibrary.Utility.Utility.TileEntityTopLeft(heatPipe.position.X, heatPipe.position.Y);
 				if (Main.tile[heatPipe.position.X, heatPipe.position.Y].liquidType() == Tile.Liquid_Lava) heatPipe.grid.heatStorage.ModifyHeatStored(Main.tile[heatPipe.position.X, heatPipe.position.Y].liquid);
 
 				if (TileEntity.ByPosition.ContainsKey(check))
@@ -83,14 +84,14 @@ namespace DawnOfIndustryCore.Heat
 						IHeatProvider provider = (IHeatProvider)te;
 
 						provider.GetHeatStorage().ModifyHeatStored(
-							-grid.heatStorage.ReceiveHeat(BaseLib.Utility.Utility.Min(grid.heatStorage.GetMaxReceive(), grid.heatStorage.GetCapacity() - grid.heatStorage.GetHeat(), provider.GetHeat())));
+							-grid.heatStorage.ReceiveHeat(TheOneLibrary.Utility.Utility.Min(grid.heatStorage.GetMaxReceive(), grid.heatStorage.GetCapacity() - grid.heatStorage.GetHeat(), provider.GetHeat())));
 					}
 					if (te is IHeatReceiver)
 					{
 						IHeatReceiver receiver = (IHeatReceiver)te;
 
 						receiver.GetHeatStorage().ModifyHeatStored(
-							grid.heatStorage.ExtractHeat(BaseLib.Utility.Utility.Min(grid.heatStorage.GetMaxExtract(), grid.heatStorage.GetHeat(), receiver.GetCapacity() - receiver.GetHeat())));
+							grid.heatStorage.ExtractHeat(TheOneLibrary.Utility.Utility.Min(grid.heatStorage.GetMaxExtract(), grid.heatStorage.GetHeat(), receiver.GetCapacity() - receiver.GetHeat())));
 					}
 				}
 			}
@@ -117,7 +118,7 @@ namespace DawnOfIndustryCore.Heat
 				heatPipe.Merge();
 				heatPipe.Frame();
 
-				foreach (Point16 add in BaseLib.Utility.Utility.CheckNeighbours())
+				foreach (Point16 add in TheOneLibrary.Utility.Utility.CheckNeighbours())
 					if (elements.ContainsKey(mouse.X + add.X, mouse.Y + add.Y))
 					{
 						HeatPipe merge = elements[mouse + add];
@@ -135,7 +136,7 @@ namespace DawnOfIndustryCore.Heat
 
 			heatPipe.grid.ReformGrid();
 
-			foreach (Point16 check in BaseLib.Utility.Utility.CheckNeighbours()) if (elements.ContainsKey(mouse + check) && elements[mouse + check].type == heatPipe.type) elements[mouse + check].Frame();
+			foreach (Point16 check in TheOneLibrary.Utility.Utility.CheckNeighbours()) if (elements.ContainsKey(mouse + check) && elements[mouse + check].type == heatPipe.type) elements[mouse + check].Frame();
 
 			player.PutItemInInventory(heatPipe.type);
 		}
@@ -150,64 +151,64 @@ namespace DawnOfIndustryCore.Heat
 			Rectangle io = new Rectangle(4, 4, 8, 8);
 			if (!io.Contains(x, y))
 			{
-				if (BaseLib.Utility.Utility.PointInTriangle(new Point(x, y), new Point(0, 0), new Point(8, 8), new Point(0, 16)))
+				if (TheOneLibrary.Utility.Utility.PointInTriangle(new Point(x, y), new Point(0, 0), new Point(8, 8), new Point(0, 16)))
 				{
-					heatPipe.connections[BaseLib.Utility.Utility.Facing.Left] = !heatPipe.connections[BaseLib.Utility.Utility.Facing.Left];
+					heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Left] = !heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Left];
 					heatPipe.Frame();
 
 					Main.NewText(heatPipe.grid.tiles.Count.ToString());
-					if (!heatPipe.connections[BaseLib.Utility.Utility.Facing.Left]) heatPipe.grid.ReformGrid();
+					if (!heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Left]) heatPipe.grid.ReformGrid();
 
 					if (elements.ContainsKey(mouse.X - 1, mouse.Y))
 					{
 						HeatPipe other = elements[mouse.X - 1, mouse.Y];
-						other.connections[BaseLib.Utility.Utility.Facing.Right] = !other.connections[BaseLib.Utility.Utility.Facing.Right];
-						if (heatPipe.connections[BaseLib.Utility.Utility.Facing.Left]) heatPipe.grid.MergeGrids(other.grid);
+						other.connections[TheOneLibrary.Utility.Utility.Facing.Right] = !other.connections[TheOneLibrary.Utility.Utility.Facing.Right];
+						if (heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Left]) heatPipe.grid.MergeGrids(other.grid);
 						other.Frame();
 					}
 				}
-				else if (BaseLib.Utility.Utility.PointInTriangle(new Point(x, y), new Point(16, 0), new Point(16, 16), new Point(8, 8)))
+				else if (TheOneLibrary.Utility.Utility.PointInTriangle(new Point(x, y), new Point(16, 0), new Point(16, 16), new Point(8, 8)))
 				{
-					heatPipe.connections[BaseLib.Utility.Utility.Facing.Right] = !heatPipe.connections[BaseLib.Utility.Utility.Facing.Right];
+					heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Right] = !heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Right];
 					heatPipe.Frame();
 
-					if (!heatPipe.connections[BaseLib.Utility.Utility.Facing.Right]) heatPipe.grid.ReformGrid();
+					if (!heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Right]) heatPipe.grid.ReformGrid();
 
 					if (elements.ContainsKey(mouse.X + 1, mouse.Y))
 					{
 						HeatPipe other = elements[mouse.X + 1, mouse.Y];
-						other.connections[BaseLib.Utility.Utility.Facing.Left] = !elements[mouse.X + 1, mouse.Y].connections[BaseLib.Utility.Utility.Facing.Left];
-						if (heatPipe.connections[BaseLib.Utility.Utility.Facing.Right]) heatPipe.grid.MergeGrids(elements[mouse.X + 1, mouse.Y].grid);
+						other.connections[TheOneLibrary.Utility.Utility.Facing.Left] = !elements[mouse.X + 1, mouse.Y].connections[TheOneLibrary.Utility.Utility.Facing.Left];
+						if (heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Right]) heatPipe.grid.MergeGrids(elements[mouse.X + 1, mouse.Y].grid);
 						elements[mouse.X + 1, mouse.Y].Frame();
 					}
 				}
-				else if (BaseLib.Utility.Utility.PointInTriangle(new Point(x, y), new Point(0, 0), new Point(16, 0), new Point(8, 8)))
+				else if (TheOneLibrary.Utility.Utility.PointInTriangle(new Point(x, y), new Point(0, 0), new Point(16, 0), new Point(8, 8)))
 				{
-					heatPipe.connections[BaseLib.Utility.Utility.Facing.Up] = !heatPipe.connections[BaseLib.Utility.Utility.Facing.Up];
+					heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Up] = !heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Up];
 					heatPipe.Frame();
 
-					if (!heatPipe.connections[BaseLib.Utility.Utility.Facing.Up]) heatPipe.grid.ReformGrid();
+					if (!heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Up]) heatPipe.grid.ReformGrid();
 
 					if (elements.ContainsKey(mouse.X, mouse.Y - 1))
 					{
 						HeatPipe other = elements[mouse.X, mouse.Y - 1];
-						other.connections[BaseLib.Utility.Utility.Facing.Down] = !other.connections[BaseLib.Utility.Utility.Facing.Down];
-						if (heatPipe.connections[BaseLib.Utility.Utility.Facing.Up]) heatPipe.grid.MergeGrids(other.grid);
+						other.connections[TheOneLibrary.Utility.Utility.Facing.Down] = !other.connections[TheOneLibrary.Utility.Utility.Facing.Down];
+						if (heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Up]) heatPipe.grid.MergeGrids(other.grid);
 						other.Frame();
 					}
 				}
-				else if (BaseLib.Utility.Utility.PointInTriangle(new Point(x, y), new Point(0, 16), new Point(8, 8), new Point(16, 16)))
+				else if (TheOneLibrary.Utility.Utility.PointInTriangle(new Point(x, y), new Point(0, 16), new Point(8, 8), new Point(16, 16)))
 				{
-					heatPipe.connections[BaseLib.Utility.Utility.Facing.Down] = !heatPipe.connections[BaseLib.Utility.Utility.Facing.Down];
+					heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Down] = !heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Down];
 					heatPipe.Frame();
 
-					if (!heatPipe.connections[BaseLib.Utility.Utility.Facing.Down]) heatPipe.grid.ReformGrid();
+					if (!heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Down]) heatPipe.grid.ReformGrid();
 
 					if (elements.ContainsKey(mouse.X, mouse.Y + 1))
 					{
 						HeatPipe other = elements[mouse.X, mouse.Y + 1];
-						other.connections[BaseLib.Utility.Utility.Facing.Up] = !other.connections[BaseLib.Utility.Utility.Facing.Up];
-						if (heatPipe.connections[BaseLib.Utility.Utility.Facing.Down]) heatPipe.grid.MergeGrids(other.grid);
+						other.connections[TheOneLibrary.Utility.Utility.Facing.Up] = !other.connections[TheOneLibrary.Utility.Utility.Facing.Up];
+						if (heatPipe.connections[TheOneLibrary.Utility.Utility.Facing.Down]) heatPipe.grid.MergeGrids(other.grid);
 						other.Frame();
 					}
 				}
@@ -230,7 +231,7 @@ namespace DawnOfIndustryCore.Heat
 			Name = "Heat Pipes",
 			Texture = DawnOfIndustryCore.PlaceholderTexturePath,
 			Draw = LayerManager.ActiveLayer == this,
-			DrawPreview = (BaseLib.Utility.Utility.HeldItem.modItem as LayerTool)?.mode == LayerTool.Mode.Place
+			DrawPreview = (TheOneLibrary.Utility.Utility.HeldItem.modItem as LayerTool)?.mode == LayerTool.Mode.Place
 		};
 	}
 }

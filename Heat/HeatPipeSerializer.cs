@@ -24,7 +24,7 @@ namespace DawnOfIndustryCore.Heat
 			heatPipe.position = tag.Get<Point16>("Position");
 			heatPipe.frameX = tag.GetShort("frameX");
 			heatPipe.frameY = tag.GetShort("frameY");
-			heatPipe.connections = tag.GetList<int>("Facing").Select(x => (BaseLib.Utility.Utility.Facing)x).Zip(tag.GetList<bool>("Connection"), (x, y) => new KeyValuePair<BaseLib.Utility.Utility.Facing, bool>(x, y)).ToDictionary(x => x.Key, x => x.Value);
+			heatPipe.connections = tag.GetList<int>("Facing").Select(x => (TheOneLibrary.Utility.Utility.Facing)x).Zip(tag.GetList<bool>("Connection"), (x, y) => new KeyValuePair<TheOneLibrary.Utility.Utility.Facing, bool>(x, y)).ToDictionary(x => x.Key, x => x.Value);
 			return heatPipe;
 		}
 	}

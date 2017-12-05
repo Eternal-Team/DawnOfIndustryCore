@@ -1,7 +1,7 @@
-﻿using BaseLib.Items;
-using BaseLib.Utility;
-using DawnOfIndustryCore.Buffs;
+﻿using DawnOfIndustryCore.Buffs;
 using Terraria;
+using TheOneLibrary.Base.Items;
+using TheOneLibrary.Utility;
 
 namespace DawnOfIndustryCore.Items
 {

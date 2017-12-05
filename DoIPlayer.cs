@@ -28,8 +28,6 @@ namespace DawnOfIndustryCore
 			}
 		}
 
-
-
 		public override void UpdateDead()
 		{
 			electrified = false;
