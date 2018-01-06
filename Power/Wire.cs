@@ -1,7 +1,7 @@
-﻿using DawnOfIndustryCore.Items.Wires;
+﻿using System.Collections.Generic;
+using DawnOfIndustryCore.Items.Wires;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using TheOneLibrary.Energy.Energy;

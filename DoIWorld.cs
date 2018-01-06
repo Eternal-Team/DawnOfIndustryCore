@@ -1,7 +1,7 @@
-﻿using DawnOfIndustryCore.Heat;
-using DawnOfIndustryCore.Power;
-using System;
+﻿using System;
 using System.IO;
+using DawnOfIndustryCore.Heat;
+using DawnOfIndustryCore.Power;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using TheOneLibrary.Layer;

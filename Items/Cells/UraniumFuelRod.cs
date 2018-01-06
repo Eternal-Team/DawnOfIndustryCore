@@ -1,6 +1,6 @@
-﻿using DawnOfIndustryCore.Buffs;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using DawnOfIndustryCore.Buffs;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;

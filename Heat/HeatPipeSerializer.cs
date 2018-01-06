@@ -13,7 +13,7 @@ namespace DawnOfIndustryCore.Heat
 			["Position"] = value.position,
 			["frameX"] = value.frameX,
 			["frameY"] = value.frameY,
-			["Facing"] = value.connections.Keys.Select(x => (int)x).ToList(),
+			["Facing"] = value.connections.Keys.Select(x => (int)x).ToList()
 		};
 
 		public override HeatPipe Deserialize(TagCompound tag)

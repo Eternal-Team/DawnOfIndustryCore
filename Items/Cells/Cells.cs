@@ -51,12 +51,24 @@ namespace DawnOfIndustryCore.Items.Cells
 			string text = "Cell";
 			switch (fluidType)
 			{
-				case FluidType.None: text = "Empty Cell"; break;
-				case FluidType.CrudeOil: text = "Crude Oil Cell"; break;
-				case FluidType.Methane: text = "Methane Cell"; break;
-				case FluidType.Gasoline: text = "Gasoline Cell"; break;
-				case FluidType.Deuterium: text = "Deuterium Cell"; break;
-				case FluidType.Tritium: text = "Tritium Cell"; break;
+				case FluidType.None:
+					text = "Empty Cell";
+					break;
+				case FluidType.CrudeOil:
+					text = "Crude Oil Cell";
+					break;
+				case FluidType.Methane:
+					text = "Methane Cell";
+					break;
+				case FluidType.Gasoline:
+					text = "Gasoline Cell";
+					break;
+				case FluidType.Deuterium:
+					text = "Deuterium Cell";
+					break;
+				case FluidType.Tritium:
+					text = "Tritium Cell";
+					break;
 			}
 
 			tooltips.Find(x => x.mod == "Terraria" && x.Name == "ItemName").text = text;

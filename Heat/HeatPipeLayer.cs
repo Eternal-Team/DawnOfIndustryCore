@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader.IO;
@@ -229,7 +229,7 @@ namespace DawnOfIndustryCore.Heat
 		{
 			Mod = DawnOfIndustryCore.Instance,
 			Name = "Heat Pipes",
-			Texture = DawnOfIndustryCore.PlaceholderTexturePath,
+			Texture = DawnOfIndustryCore.PlaceholderTexture,
 			Draw = LayerManager.ActiveLayer == this,
 			DrawPreview = (TheOneLibrary.Utility.Utility.HeldItem.modItem as LayerTool)?.mode == LayerTool.Mode.Place
 		};

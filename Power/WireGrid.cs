@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Terraria;
 using TheOneLibrary.Energy.Energy;
 
 namespace DawnOfIndustryCore.Power
@@ -30,7 +31,7 @@ namespace DawnOfIndustryCore.Power
 
 		public void ReformGrid()
 		{
-			Terraria.Main.NewText(tiles.Count);
+			Main.NewText(tiles.Count);
 
 			for (int i = 0; i < tiles.Count; i++)
 			{

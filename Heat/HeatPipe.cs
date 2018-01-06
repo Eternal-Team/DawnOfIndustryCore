@@ -1,10 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using TheOneLibrary.Layer.Layer;
-using Facing = TheOneLibrary.Utility.Utility.Facing;
 
 namespace DawnOfIndustryCore.Heat
 {
@@ -18,14 +17,14 @@ namespace DawnOfIndustryCore.Heat
 		public short frameX;
 		public short frameY;
 
-		public Dictionary<Facing, bool> connections = new Dictionary<Facing, bool>(4);
+		public Dictionary<TheOneLibrary.Utility.Utility.Facing, bool> connections = new Dictionary<TheOneLibrary.Utility.Utility.Facing, bool>(4);
 
 		public HeatPipe()
 		{
-			connections.Add(Facing.Left, true);
-			connections.Add(Facing.Right, true);
-			connections.Add(Facing.Up, true);
-			connections.Add(Facing.Down, true);
+			connections.Add(TheOneLibrary.Utility.Utility.Facing.Left, true);
+			connections.Add(TheOneLibrary.Utility.Utility.Facing.Right, true);
+			connections.Add(TheOneLibrary.Utility.Utility.Facing.Up, true);
+			connections.Add(TheOneLibrary.Utility.Utility.Facing.Down, true);
 		}
 
 		public void SetDefaults(int type)
