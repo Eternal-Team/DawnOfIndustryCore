@@ -1,7 +1,7 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
 
-namespace DawnOfIndustryCore
+namespace DawnOfIndustryCore.Global
 {
 	public class DoINPC : GlobalNPC
 	{

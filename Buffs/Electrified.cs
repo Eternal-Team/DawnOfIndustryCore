@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using DawnOfIndustryCore.Global;
+using Terraria;
 using Terraria.ModLoader;
 
 namespace DawnOfIndustryCore.Buffs

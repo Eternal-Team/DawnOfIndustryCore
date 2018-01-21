@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DawnOfIndustryCore.Global;
 using DawnOfIndustryCore.Items.Wires;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

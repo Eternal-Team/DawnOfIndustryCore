@@ -1,26 +1,17 @@
 ﻿using DawnOfIndustryCore.Heat;
 using DawnOfIndustryCore.Power;
-using Microsoft.Win32;
-using Microsoft.Xna.Framework;
+using DawnOfIndustryCore.Research.Logic;
+using DawnOfIndustryCore.UI;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.OS;
 using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Security.AccessControl;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.UI;
 using TheOneLibrary.Base;
 using TheOneLibrary.Utility;
-using Color = Microsoft.Xna.Framework.Color;
-using Point = System.Drawing.Point;
-using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace DawnOfIndustryCore
 {
@@ -33,6 +24,7 @@ namespace DawnOfIndustryCore
 		public const string ItemTexturePath = TexturePath + "Items/";
 		public const string TileTexturePath = TexturePath + "Tiles/";
 		public const string BuffTexturePath = TexturePath + "Buffs/";
+		public const string UIPath = TexturePath + "UI/";
 
 		[Null] public static Texture2D wireTexture;
 		[Null] public static Texture2D heatPipeTexture;
@@ -41,6 +33,13 @@ namespace DawnOfIndustryCore
 		[Null] public static Texture2D outTexture;
 		[Null] public static Texture2D bothTexture;
 		[Null] public static Texture2D blockedTexture;
+
+		[Null] public static Texture2D textureBlueprint;
+		[Null] public static Texture2D lightningCap;
+		[Null] public static Texture2D lightningSegment;
+
+		public ResearchUI ResearchUI;
+		public UserInterface IResearchUI;
 
 		public DawnOfIndustryCore()
 		{
@@ -55,35 +54,99 @@ namespace DawnOfIndustryCore
 
 		public override void Load()
 		{
-			Instance = this;
-
-			wireTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/BasicWire");
-			heatPipeTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/HeatPipe");
-
-			inTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/ConnectionIn");
-			outTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/ConnectionOut");
-			bothTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/ConnectionBoth");
-			blockedTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/ConnectionBlocked");
-
-			TagSerializer.AddSerializer(new WireSerializer());
-			TagSerializer.AddSerializer(new HeatPipeSerializer());
-
-			Main.OnPreDraw += PreDraw;
-			Main.OnPostDraw += PostDraw;
-
-			if (!Main.dedServ)
+			try
 			{
-				try
+				Instance = this;
+				
+				TagSerializer.AddSerializer(new WireSerializer());
+				TagSerializer.AddSerializer(new HeatPipeSerializer());
+
+				//Main.OnPreDraw += PreDraw;
+				//Main.OnPostDraw += PostDraw;
+
+				if (!Main.dedServ)
 				{
-					Platform.Current.SetWindowUnicodeTitle(Main.instance.Window, "Terraria: Dawn of Industry");
+					wireTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/BasicWire");
+					heatPipeTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/HeatPipe");
+
+					inTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/ConnectionIn");
+					outTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/ConnectionOut");
+					bothTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/ConnectionBoth");
+					blockedTexture = ModLoader.GetTexture("DawnOfIndustryCore/Textures/Tiles/ConnectionBlocked");
+
+					textureBlueprint = ModLoader.GetTexture(UIPath + "Blueprint");
+					lightningCap = ModLoader.GetTexture(TexturePath + "LightningCap");
+					lightningSegment = ModLoader.GetTexture(TexturePath + "LightningSegment");
+
+					ResearchUI = new ResearchUI();
+					ResearchUI.Activate();
+					IResearchUI = new UserInterface();
+					IResearchUI.SetState(ResearchUI);
+
+					try
+					{
+						Platform.Current.SetWindowUnicodeTitle(Main.instance.Window, "Terraria: Dawn of Industry");
+					}
+					catch (Exception ex)
+					{
+						this.Log($"Failed to change title:\n{ex}");
+					}
 				}
-				catch (Exception ex)
+			}
+			catch (Exception ex)
+			{
+				ErrorLogger.Log(ex);
+			}
+		}
+
+		public override void PostSetupContent()
+		{
+			try
+			{
+				ModTranslation translation = CreateTranslation("Start");
+				translation.SetDefault("The starting tab");
+				AddTranslation(translation);
+
+				translation = CreateTranslation("Advanced");
+				translation.SetDefault("the second tab");
+				AddTranslation(translation);
+				
+				Research.Logic.Research.RegisterCategory(this, "Start", PlaceholderTexture);
+				Research.Logic.Research.RegisterCategory(this, "Advanced", ItemTexturePath + "Thatch");
+				
+				ResearchLoader.Autoload();
+				ResearchLoader.SetupContent();
+
+				ResearchUI.PostInit();
+			}
+			catch (Exception ex)
+			{
+				ErrorLogger.Log(ex);
+			}
+		}
+
+		public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+		{
+			int InventoryIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Inventory"));
+
+			if (InventoryIndex != -1)
+			{
+				if (!Main.ingameOptionsWindow && ResearchUI.visible)
 				{
-					this.Log($"Failed to change title:\n{ex}");
+					layers.Insert(InventoryIndex + 1, new LegacyGameInterfaceLayer(
+						"TDoICore: ResearchUI",
+						delegate
+						{
+							IResearchUI.Update(Main._drawInterfaceGameTime);
+							ResearchUI.Draw(Main.spriteBatch);
+
+							return true;
+						}, InterfaceScaleType.UI));
 				}
 			}
 		}
 
+		/*
 		#region ints, dll imports
 		public const int WM_PRINT = 0x0317;
 		public const int WM_PRINTCLIENT = 0x0318;
@@ -114,25 +177,25 @@ namespace DawnOfIndustryCore
 
 			return bmp;
 		}
-		
+
 		private void PostDraw(GameTime obj)
 		{
 			Task.Run(delegate
 			{
-				MemoryStream stream = new MemoryStream();
+				using (MemoryStream stream = new MemoryStream())
+				{
+					Bitmap map = CaptureControlImage(browser, handle);
+					map.Save(stream, ImageFormat.Png);
 
-				Bitmap map= CaptureControlImage(browser, handle);
-				map.Save(stream, ImageFormat.Png);
-
-				texture = Texture2D.FromStream(Main.graphics.GraphicsDevice, stream);
-				stream.Dispose();
+					texture = Texture2D.FromStream(Main.graphics.GraphicsDevice, stream);
+				}
 			});
 
 			if (texture != null)
 			{
 				Main.spriteBatch.Begin();
 
-				Main.spriteBatch.Draw(texture, new Rectangle(Main.screenWidth - 750, 20, 750, 422), Color.White);
+				Main.spriteBatch.Draw(texture, new Microsoft.Xna.Framework.Rectangle(Main.screenWidth - 750, 20, 750, 422), Microsoft.Xna.Framework.Color.White);
 
 				//Utils.DrawBorderStringFourWay(Main.spriteBatch, Main.fontMouseText, "MUEH", 120, 120, Color.DarkRed, Main.DiscoColor, Vector2.Zero);
 
@@ -237,13 +300,13 @@ namespace DawnOfIndustryCore
 
 				browser = new WebBrowser
 				{
-					Location = new Point(0, 0),
+					Location = new System.Drawing.Point(0, 0),
 					Name = "video",
 					Size = new Size(750, 422),
 					Visible = false
 				};
 				form.Controls.Add(browser);
-				
+
 				handle = browser.Handle;
 
 				//&autoplay=1
@@ -253,6 +316,7 @@ namespace DawnOfIndustryCore
 				locked = true;
 			}
 		}
+		*/
 
 		public override void Unload()
 		{

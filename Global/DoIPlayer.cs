@@ -1,15 +1,22 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace DawnOfIndustryCore
+namespace DawnOfIndustryCore.Global
 {
 	public class DoIPlayer : ModPlayer
 	{
 		public bool radiation;
 		public bool electrified;
+
+		public override void SetupStartInventory(IList<Item> items)
+		{
+			items.ToList().RemoveAll(x => x.type == ItemID.CopperPickaxe || x.type == ItemID.CopperAxe || x.type == ItemID.CopperShortsword);
+		}
 
 		public override void UpdateBadLifeRegen()
 		{

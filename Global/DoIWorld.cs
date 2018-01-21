@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using TheOneLibrary.Layer;
 
-namespace DawnOfIndustryCore
+namespace DawnOfIndustryCore.Global
 {
 	public class DoIWorld : ModWorld
 	{
